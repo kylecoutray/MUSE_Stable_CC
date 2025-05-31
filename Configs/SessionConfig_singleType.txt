@@ -1,0 +1,28 @@
+OrderedDictionary<string,string>	TaskMappings	{WMCC: WMCC, EffortControl:EffortControl, FlexLearning:FlexLearning, MazeGame:MazeGame, THR:THR, VisualSearch:VisualSearch, WhatWhenWhere:WhatWhenWhere, WorkingMemory:WorkingMemory}
+Dictionary<string,string>	TaskIcons	{WMCC: WMCC, EffortControl:EffortControl, FlexLearning:FlexLearning, MazeGame:MazeGame, THR:THR, VisualSearch:VisualSearch, WhatWhenWhere:WhatWhenWhere, WorkingMemory:WorkingMemory}
+
+string ContextExternalFilePath "//Users//kyle.//Desktop//MUSE_Stable//Resources//Contexts"
+string TaskIconsFolderPath     "//Users//kyle.//Desktop//MUSE_Stable//Resources//TaskIcons"
+
+
+float	TaskSelectionTimeout	2000
+bool	MacMainDisplayBuild	false
+bool	IsHuman	false	
+bool	EventCodesActive	true
+bool	SyncBoxActive	false
+string	SerialPortAddress	"\\\\.\\COM3"
+int	SerialPortSpeed	115200
+List<string>	SyncBoxInitCommands	{"INI", "ECH 0", "TIM 0", "LIN 33", "LVB 0", "NSU 2", "NPD 10", "NHD 2", "NDW 16", "CAO 20000", "TBP 1000", "TBW 50", "TIB 1", "LOG 1"}
+int	SplitBytes	2
+int	RewardHotKeyNumPulses	1
+int	RewardHotKeyPulseSize	250 
+bool	GuidedTaskSelection	FALSE
+float	ShotgunRaycastCircleSize_DVA	1
+float	ParticipantDistance_CM	60
+float	ShotgunRaycastSpacing_DVA	0.3
+bool	SendCameraPulses	false
+int	Camera_PulseSize_Ticks	250
+int	Camera_TaskStart_NumPulses	3
+int	Camera_TaskEnd_NumPulses	3
+int	Camera_TrialStart_NumPulses	1
+int	Camera_TrialPulseMinGap_Sec	8

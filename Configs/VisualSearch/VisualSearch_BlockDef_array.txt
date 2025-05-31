@@ -1,0 +1,3 @@
+BlockName	BlockCount	NumInitialTokens	TokenBarCapacity	ProbabilisticNumPulses	PulseSize	ContextName
+VisSearch	1	0	6	[{"NumReward":3,"Probability":0.6}, {"NumReward":1, "Probability":0.4}]	250	006_034_058_001_3
+VisSearch	2	0	6	[{"NumReward":3,"Probability":0.8}, {"NumReward":1, "Probability":0.2}]	250	006_034_066_001_3

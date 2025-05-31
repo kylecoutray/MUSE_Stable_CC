@@ -1,0 +1,4 @@
+BlockName	BlockCount	ContextName	TrialDefSelectionStyle	MaxDiffLevel	AvgDiffLevel	DiffLevelJitter	NumReversalsUntilTerm	MinTrialsBeforeTermProcedure
+EC_NonAdaptive	1	011_058_004_001_3	default	-1	-1	-1	-1	-1
+EC_NonAdaptive	2	011_058_004_001_3	default	-1	-1	-1	-1	-1
+EC_NonAdaptive	3	011_058_004_001_3	default	-1	-1	-1	-1	-1

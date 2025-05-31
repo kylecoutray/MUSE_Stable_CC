@@ -1,0 +1,10 @@
+string	ExternalStimFolderPath	"//Users//kyle.//Desktop//MUSEapril//Resources//Stimuli"
+string	ExternalStimExtension	""
+float	ExternalStimScale	0.05
+bool	StimFacingCamera	TRUE
+string	ShadowType	"None"
+Vector3	StartButtonPosition	[0, 0, 0]
+float	StartButtonScale	1.2
+float	TouchFeedbackDuration	0.3
+List<string>	FeedbackControllers	["Audio", "Halo", "Token"]
+bool	NeutralITI	false

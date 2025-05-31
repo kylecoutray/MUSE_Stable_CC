@@ -1,0 +1,9 @@
+string	ExternalStimFolderPath	"C:\Users\WomLab_Unity\OneDrive\Desktop\MUSE\Resources\Stimuli"
+bool	StimFacingCamera	TRUE
+float	ExternalStimScale	0.15
+string	ShadowType	"None"
+Vector3	StartButtonPosition	[0, 0, 0]
+float	StartButtonScale	1.2
+float	TouchFeedbackDuration	0.3
+List<string>	FeedbackControllers	["Audio", "Halo", "Slider"]
+bool	NeutralITI	false

@@ -1,0 +1,6 @@
+string	ExternalStimFolderPath	"C:\Users\WomLab_Unity\OneDrive\Desktop\MUSE\Resources\Stimuli"
+float	ExternalStimScale	0.00775
+bool	MakeStimPopOut	false
+List<string>	FeedbackControllers	["Audio", "Halo", "Token"]
+bool	StimFacingCamera	true
+string	ShadowType	"None"

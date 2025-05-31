@@ -1,0 +1,57 @@
+{
+  "MazeStart": {
+    "Value": 12076,
+    "Description": "First frame where the maze start tile is selected"
+  },
+  "MazeFinish": {
+    "Value": 12077,
+    "Description": "First frame where the final tile of the maze path is selected"
+  },
+  "RuleBreakingError": {
+    "Value": 12078,
+    "Description": "First frame where touch target is on a tile that does not follow the rules"
+  },
+  "RuleAbidingError": {
+    "Value": 12079,
+    "Description": "First frame where touch target is on a tile that does follow the rules; but is not on the hidden path "
+  },
+  "PerseverativeError": {
+    "Value": 12080,
+    "Description": "First frame where the touch target is on a tile following an error; but the tile is not the last correct touch"
+  },
+  "LastCorrectSelection": {
+    "Value": 12081,
+    "Description": "Reselected the tile that represents their current location in the maze"
+  },
+  "FlashingTileFbOn": {
+    "Value": 12082,
+    "Description": "Last correct tile flashes green due to perseverative error"
+  },
+  "FlashingTileFbOff": {
+    "Value": 12083,
+    "Description": "Last correct tile stops flashing green"
+  },
+  "MazeOn": {
+    "Value": 12084,
+    "Description": "Maze is made visible on the screen"
+  },
+  "MazeOff": {
+    "Value": 12085,
+    "Description": "Maze is removed from the screen"
+  },
+  "TileFbOn": {
+    "Value": 12086,
+    "Description": "Tile feedback made visible on the screen"
+  },
+  "TileFbOff": {
+    "Value": 12087,
+    "Description": "Tile feedback made not visible on the screen"
+  },
+  "TileCode": {
+    "Range": [
+      12088,
+      14088
+    ],
+    "Description": "12088-14088 indicates the current tile code (must be defined by the experimenter in the Maze folder)"
+  }
+}

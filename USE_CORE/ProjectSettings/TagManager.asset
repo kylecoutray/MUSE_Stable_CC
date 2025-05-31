@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - BottomLeft
+  - Maze List
+  - Game Configs
+  - Center
+  - PausePanel
+  - Quaddle
+  - PlayerEyes
+  - LeftCircle
+  - MiddleCircle
+  - Blockade
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - FloorTile
+  - Water
+  - UI
+  - PostProcessing
+  - 
+  - BG
+  - Terrain
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BG
+    uniqueID: 4049992613
+    locked: 0
+  - name: StartButtonUI
+    uniqueID: 3959982545
+    locked: 0

@@ -1,0 +1,7 @@
+TrialID	BlockCount	TrialStimIndices	TrialStimLocations	ProbabilisticTrialStimTokenReward	RandomizedLocations
+ NNNew.4.0001	1	[102, 107, 106]	[[-7.3, -2.8, 0],[-2.8, 7.3, 0],[2.8, -7.3, 0]]	[[{"NumReward":3,"Probability":1}], [{"NumReward":-3,"Probability":1}], [{"NumReward":-3,"Probability":1}]]	FALSE
+ NNNew.4.0002	1	[87, 98, 0]	[[-7.3, -2.8, 0],[7.3, 2.8, 0],[2.8, -7.3, 0]]	[[{"NumReward":3,"Probability":1}], [{"NumReward":-3,"Probability":1}], [{"NumReward":-3,"Probability":1}]]	FALSE
+ NNNew.4.0003	1	[78, 137, 117]	[[-0.5, -7.8, 0],[0.5, 7.8, 0],[7.8, -0.5, 0]]	[[{"NumReward":3,"Probability":1}], [{"NumReward":-3,"Probability":1}], [{"NumReward":-3,"Probability":1}]]	FALSE
+ IDSame.1.0001	2	[31, 53, 37]	[[-7.3, -2.8, 0],[-2.8, 7.3, 0],[2.8, -7.3, 0]]	[[{"NumReward":3,"Probability":1}], [{"NumReward":-1,"Probability":1}], [{"NumReward":-1,"Probability":1}]]	FALSE
+ IDSame.1.0002	2	[49, 71, 68]	[[-7.3, -2.8, 0],[7.3, 2.8, 0],[2.8, -7.3, 0]]	[[{"NumReward":3,"Probability":1}], [{"NumReward":-1,"Probability":1}], [{"NumReward":-1,"Probability":1}]]	FALSE
+ IDSame.1.0003	2	[56, 26, 21]	[[-0.5, -7.8, 0],[0.5, 7.8, 0],[7.8, -0.5, 0]]	[[{"NumReward":3,"Probability":1}], [{"NumReward":-1,"Probability":1}], [{"NumReward":-1,"Probability":1}]]	FALSE
