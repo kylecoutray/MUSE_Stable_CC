@@ -12597,6 +12597,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3520016351343740209, guid: 026a3e14a27084f7d8517222cbfacea4,
+        type: 3}
+      propertyPath: hoverImageColor.b
+      value: 0.0039215684
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520016351343740209, guid: 026a3e14a27084f7d8517222cbfacea4,
+        type: 3}
+      propertyPath: hoverImageColor.g
+      value: 0.0039215684
+      objectReference: {fileID: 0}
     - target: {fileID: 3520016351343740211, guid: 026a3e14a27084f7d8517222cbfacea4,
         type: 3}
       propertyPath: m_Name
@@ -12606,6 +12616,21 @@ PrefabInstance:
         type: 3}
       propertyPath: radius
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520016351343740215, guid: 026a3e14a27084f7d8517222cbfacea4,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.4392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520016351343740215, guid: 026a3e14a27084f7d8517222cbfacea4,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.68235296
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520016351343740215, guid: 026a3e14a27084f7d8517222cbfacea4,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.8117647
       objectReference: {fileID: 0}
     - target: {fileID: 3520016351343740215, guid: 026a3e14a27084f7d8517222cbfacea4,
         type: 3}
