@@ -37,14 +37,17 @@ using static SelectionTracking.SelectionTracker;
 public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
 {
 
-    private const byte TTL_FixOn = 1;
-    private const byte TTL_FixIn = 2;
-    private const byte TTL_CueOn = 3;
-    private const byte TTL_CueOff = 4;
-    private const byte TTL_FixOff = 5;
-    private const byte TTL_Success = 6;      // Not used in all WM code but available
-    private const byte TTL_EndOfTrials = 7;
-    private const byte TTL_BlockStartEnd = 9; // Session/Block start/end
+    public bool blockStart = true; // Added for block logic purposes
+    private const byte TTL_TrialOn = 1;
+    private const byte TTL_SampleOn = 2;
+    private const byte TTL_SampleOff = 3;
+    private const byte TTL_DistractorOn = 4;
+    private const byte TTL_DistractorOff = 5;
+    private const byte TTL_TargetOn = 6;      
+    private const byte TTL_ChoiceOn = 7;
+    private const byte TTL_BlockStartEnd = 8; // Session/Block start/end. End block used in WorkingMemory_TaskLevel.cs
+
+    private const byte SuccessFail = 9;
 
 
     private ArduinoTTLManager arduinoTTLManager;
@@ -120,11 +123,21 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         State ITI = new State("ITI");
 
         AddActiveStates(new List<State> { InitTrial, DisplaySample, DisplayDistractors, SearchDisplay, SelectionFeedback, TokenFeedback, ITI });
+        
 
+        DisplaySample.AddSpecificInitializationMethod(() =>
+        {
+            arduinoTTLManager?.SendTTL(TTL_SampleOn);
+        });
+
+        DisplayDistractors.AddSpecificInitializationMethod(() =>
+        {
+            arduinoTTLManager?.SendTTL(TTL_DistractorOn); //send distractor ttl
+        });
 
         Add_ControlLevel_InitializationMethod(() =>
         {
-            arduinoTTLManager?.SendTTL(TTL_BlockStartEnd); // Session/block start
+            
             
             if (!Session.WebBuild) //player view variables
             {
@@ -144,6 +157,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
                 {
                     StartButton = Session.HumanStartPanel.StartButtonGO;
                     Session.HumanStartPanel.SetVisibilityOnOffStates(InitTrial, InitTrial);
+                    
                 }
                 else
                 {
@@ -157,14 +171,15 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         });
         SetupTrial.AddSpecificInitializationMethod(() =>
         {
+            
             //Set the Stimuli Light/Shadow settings
             SetShadowType(currentTaskDef.ShadowType, "WorkingMemory_DirectionalLight");
             if (currentTaskDef.StimFacingCamera)
                 MakeStimFaceCamera();
 
 
-                        
-            if (!configUIVariablesLoaded) 
+
+            if (!configUIVariablesLoaded)
                 LoadConfigUIVariables();
 
             UpdateExperimenterDisplaySummaryStrings();
@@ -183,7 +198,6 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
 
         InitTrial.AddSpecificInitializationMethod(() =>
         {
-            arduinoTTLManager?.SendTTL(TTL_FixOn); // Fixation appears
 
             //Set timer duration for the trial:
             if (Session.SessionDef.IsHuman)
@@ -205,48 +219,71 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
             ShotgunHandler.MinDuration = minObjectTouchDuration.value;
             ShotgunHandler.MaxDuration = maxObjectTouchDuration.value;
         });
-
+/*
         InitTrial.SpecifyTermination(() => ShotgunHandler.LastSuccessfulSelectionMatchesStartButton(), DisplaySample, () =>
         {
-            arduinoTTLManager?.SendTTL(TTL_FixIn); // Fixation acquired
 
             //Set the token bar settings
             TokenFBController.enabled = true;
             ShotgunHandler.HandlerActive = false;
-           
+
             Session.EventCodeManager.SendCodeThisFrame("TokenBarVisible");
+            arduinoTTLManager?.SendTTL(TTL_TrialOn); // TrialOn
         });
-        
+*/
+        InitTrial.SpecifyTermination(
+    () => !Session.SessionDef.IsHuman || !blockStart || ShotgunHandler.LastSuccessfulSelectionMatchesStartButton(),
+    DisplaySample,
+    () =>
+    {
+        if (blockStart && Session.SessionDef.IsHuman)
+        {
+            // Only show the play button logic if start
+            Debug.Log("Starting block - proceeding normally.");
+            blockStart = false;
+            arduinoTTLManager?.SendTTL(TTL_BlockStartEnd);
+        }
+        else
+        {
+            Debug.Log("Skipping play button - auto advancing trial.");
+        }
+
+        // Always run this setup code:
+        TokenFBController.enabled = true;
+        ShotgunHandler.HandlerActive = false;
+        Session.EventCodeManager.SendCodeThisFrame("TokenBarVisible");
+        arduinoTTLManager?.SendTTL(TTL_TrialOn); // TrialOn
+    });
+
+
         // Show the target/sample by itself for some time
         DisplaySample.AddTimer(() => CurrentTrialDef.DisplaySampleDuration, Delay, () =>
         {
-            arduinoTTLManager?.SendTTL(TTL_CueOn); // Cue appears
-
-            // Send CUE OFF when cue disappears:
-            arduinoTTLManager?.SendTTL(TTL_CueOff);
-
-
+            arduinoTTLManager?.SendTTL(TTL_SampleOff); //samples will be off now
             if (postSampleDistractorStims.stimDefs.Count != 0)
                 StateAfterDelay = DisplayDistractors;
             else
+            {
                 StateAfterDelay = SearchDisplay;
+
+            }    
             DelayDuration = CurrentTrialDef.PostSampleDelayDuration;
         });
 
         // Show some distractors without the target/sample
         DisplayDistractors.AddTimer(() => CurrentTrialDef.DisplayPostSampleDistractorsDuration, Delay, () =>
-          {
-              StateAfterDelay = SearchDisplay;
-              DelayDuration = CurrentTrialDef.PostSampleDelayDuration;
-          });
+        {
+            StateAfterDelay = SearchDisplay;
+            arduinoTTLManager?.SendTTL(TTL_DistractorOff); //distractors will be off now
+            DelayDuration = CurrentTrialDef.PostSampleDelayDuration;
+        });
 
         // Show the target/sample with some other distractors
         // Wait for a click and provide feedback accordingly
         SearchDisplay.AddSpecificInitializationMethod(() =>
         {
 
-            arduinoTTLManager?.SendTTL(TTL_FixOff); // Fixation disappears (subject can respond)
-
+            arduinoTTLManager?.SendTTL(TTL_TargetOn); // Sample + Distractors shown pulse
 
             Session.EventCodeManager.SendCodeThisFrame("TokenBarVisible");
             
@@ -263,6 +300,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
             //reset it so the duration is 0 on exp display even if had one last trial
             OngoingSelection = null;
         });
+
         SearchDisplay.AddUpdateMethod(() =>
         {
             if (ShotgunHandler.SuccessfulSelections.Count > 0)
@@ -286,11 +324,11 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         {
             choiceMade = false;
             CorrectSelection = selectedSD.IsTarget;
+            arduinoTTLManager?.SendTTL(TTL_ChoiceOn); //Send TTL for selection made
 
             if (CorrectSelection)
             {
-                Debug.Log($"CorrectSelection = {CorrectSelection}, about to send TTL_Success (trial: {TrialCount_InTask})");
-                arduinoTTLManager?.SendTTL(TTL_Success);
+                Debug.Log($"CorrectSelection = {CorrectSelection}, (trial: {TrialCount_InTask})"); // Debug only success/failure
 
                 NumCorrect_InBlock++;
                 CurrentTaskLevel.NumCorrect_InTask++;
@@ -298,7 +336,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
             }
             else
             {
-                //arduinoTTLManager?.SendTTL(6); // Incorrect
+                Debug.Log($"IncorrectSelection. Correct selection was = {CorrectSelection}, (trial: {TrialCount_InTask})"); //Debug only success/failure
                 NumErrors_InBlock++;
                 CurrentTaskLevel.NumErrors_InTask++;
                 Session.EventCodeManager.SendCodeThisFrame("IncorrectResponse");
@@ -309,12 +347,14 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
                 SelectedStimIndex = selectedSD.StimIndex;
                 SelectedStimLocation = selectedSD.StimLocation;
             }
+
             Accuracy_InBlock = NumCorrect_InBlock/(TrialCount_InBlock + 1);
             UpdateExperimenterDisplaySummaryStrings();
         });
         SearchDisplay.AddTimer(() => selectObjectDuration.value, ITI, () =>
         {
             //means the player got timed out and didn't click on anything
+            Debug.Log($"IncorrectSelection. (trial: {TrialCount_InTask})"); //Debug only success/failure
             Session.EventCodeManager.SendCodeThisFrame("NoChoice");
             Session.EventCodeManager.SendRangeCodeThisFrame("CustomAbortTrial", AbortCodeDict["NoSelectionMade"]);
             AbortCode = 6;
@@ -373,7 +413,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         ITI.AddSpecificInitializationMethod(() =>
         {
 
-            arduinoTTLManager?.SendTTL(TTL_EndOfTrials); // End of trial
+            
 
             if (currentTaskDef.NeutralITI)
             {
@@ -382,12 +422,14 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
                 Session.EventCodeManager.SendCodeThisFrame("ContextOff");               
             }
         });
+
         // Wait for some time at the end
         ITI.AddTimer(() => itiDuration.value, FinishTrial, () =>
         {
             UpdateExperimenterDisplaySummaryStrings();
         });
 
+        
         //---------------------------------ADD FRAME AND TRIAL DATA TO LOG FILES---------------------------------------
         DefineFrameData();
         DefineTrialData();
@@ -437,6 +479,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         // Remove the Stimuli, Context, and Token Bar from the Player View and move to neutral ITI State
         if(!Session.WebBuild)
         {
+
             if (GameObject.Find("MainCameraCopy").transform.childCount != 0)
                 DestroyChildren(GameObject.Find("MainCameraCopy"));
         }
@@ -445,7 +488,11 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
 
 
         if (AbortCode == 0)
+        {
+            
             CurrentTaskLevel.SetBlockSummaryString();
+        }
+
         else
         {
             CurrentTaskLevel.NumAbortedTrials_InBlock++;
@@ -457,6 +504,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
 
     public void ResetBlockVariables()
     {
+        
         SearchDurations_InBlock.Clear();
         NumErrors_InBlock = 0;
         NumCorrect_InBlock = 0;
@@ -479,6 +527,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
 
         List<StimDef> rewardedStimdefs = new List<StimDef>();
 
+       
         sampleStim = new StimGroup("SampleStim", GetStateFromName("DisplaySample"), GetStateFromName("DisplaySample"));
         for (int iStim = 0; iStim < CurrentTrialDef.SearchStimIndices.Length; iStim++)
         {
@@ -602,3 +651,6 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         CurrentTaskLevel.SetBlockSummaryString();
     }
 }
+
+
+// EndBlock Logic is placed in WorkingMemory_TaskLevel

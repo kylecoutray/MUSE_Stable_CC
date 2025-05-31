@@ -70,12 +70,17 @@ public class WorkingMemory_TaskLevel : ControlLevel_Task_Template
         if (SearchDurations_InTask.Count > 0)
             data["Average Search Duration"] = CalculateAverageDuration(SearchDurations_InTask);
         
+
         return data;
     }
 
 
     public override OrderedDictionary GetTaskResultsData()
     {
+
+        ArduinoTTLManager arduinoTTLManager = GameObject.FindObjectOfType<ArduinoTTLManager>();
+        arduinoTTLManager?.SendTTL(8);  // TTL_BlockStartEnd sent right before data screen shows.
+        
         OrderedDictionary data = base.GetTaskResultsData();
 
         data["TokenBar Completions"] = NumTokenBarFull_InTask;

@@ -17,15 +17,15 @@ public class ArduinoTTLManager : MonoBehaviour
     private static ArduinoTTLManager instance;
 
     private static readonly string[] eventLabels = {
-        "FixOn",           // 1 trial on TTL
-        "FixIn",           // 2 sample on TTL
-        "CueOn",           // 3 sample off
-        "CueOff",          // 4 distractor on TTL
-        "FixOff",          // 5 distractor off
-        "Success",         // 6 target on TTL
-        "EndOfTrials",     // 7 choice TTL
-                            // success/failure
-        "StartEndBlock"    // 8 TTL!
+        "TrialOn",           // 1 TTL WAS FixOn
+        "SampleOn",           // 2 TTL WAS FixIn
+        "SampleOff",           // 3 WAS CueOn
+        "DisractorOn",          // 4 TTL WAS CueOff
+        "DistractorOff",          // 5 WAS FixOff
+        "TargetOn",         // 6 TTL WAS Success
+        "ChoiceOn",     // 7 TTL WAS EndOfTrials
+        "StartEndBlock", // 8 TTL!
+        "SuccessFail"    // 9 success/failure 
     };
 
 
