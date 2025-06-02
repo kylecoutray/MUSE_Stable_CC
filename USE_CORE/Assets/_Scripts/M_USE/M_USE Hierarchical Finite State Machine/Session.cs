@@ -43,8 +43,10 @@ public static class Session
     public static bool WebBuild;
     public static bool Using2DStim;
 
-    public static readonly string DefaultStimFolderPath = "LocalResources/3DStimuli";
-    public static readonly string DefaultContextFolderPath = "LoacalResources/Contexts";
+
+    
+    public static readonly string DefaultStimFolderPath = "LocalResources/Quaddle_set_4_features/Stimuli";
+    public static readonly string DefaultContextFolderPath = "LocalResources/Contexts";
 
     //Info Collected from Init Screen Panels:
     public static string SubjectID;
