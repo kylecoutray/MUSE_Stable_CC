@@ -33,7 +33,7 @@ public class ArduinoTTLManager : MonoBehaviour
 
     private static readonly HashSet<string> ttlEnabledEvents = new HashSet<string> //only the events that TTL will send for
     {
-        "TrialOn", "SampleOn", "DisractorOn", "TargetOn", "Choice", "StartEndBlock"
+        "TrialOn", "SampleOn", "DistractorOn", "TargetOn", "Choice", "StartEndBlock"
     };
 
     private string logFilePath;
