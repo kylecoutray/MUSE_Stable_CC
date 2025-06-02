@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.IO.Ports;
 using UnityEngine;
+using System.Collections.Generic;
+
 
 /// <summary>
 /// Sends TTL event codes via serial to Arduino for event marking.
@@ -17,24 +19,29 @@ public class ArduinoTTLManager : MonoBehaviour
     private static ArduinoTTLManager instance;
 
     private static readonly string[] eventLabels = {
-        "TrialOn",           // 1 TTL WAS FixOn
-        "SampleOn",           // 2 TTL WAS FixIn
-        "SampleOff",           // 3 WAS CueOn
-        "DisractorOn",          // 4 TTL WAS CueOff
-        "DistractorOff",          // 5 WAS FixOff
-        "TargetOn",         // 6 TTL WAS Success
-        "ChoiceOn",     // 7 TTL WAS EndOfTrials
-        "StartEndBlock", // 8 TTL!
-        "SuccessFail"    // 9 success/failure 
+        "TrialOn",           // 1 TTL
+        "SampleOn",           // 2 TTL
+        "SampleOff",           // 3 
+        "DistractorOn",          // 4 TTL 
+        "DistractorOff",          // 5
+        "TargetOn",         // 6 TTL 
+        "Choice",     // 7 TTL 
+        "StartEndBlock", // 8 TTL
+        "Success",    // 9 LOG ONLY. Will not work with Arduino script.
+        "Fail",         // 10 LOG ONLY. Will not work with Arduino script. 
     };
 
+    private static readonly HashSet<string> ttlEnabledEvents = new HashSet<string> //only the events that TTL will send for
+    {
+        "TrialOn", "SampleOn", "DisractorOn", "TargetOn", "Choice", "StartEndBlock"
+    };
 
     private string logFilePath;
 
     void Awake()
     {
 
-         // Prevent duplicate instances
+        // Prevent duplicate instances
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -66,13 +73,22 @@ public class ArduinoTTLManager : MonoBehaviour
 
         // Log first entry
         LogToFile($"[TTL][INIT] Log started at {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
-
+        
         if (testMode)
         {
             LogToBoth("TTL Manager in TEST MODE (no serial port will be opened).");
             return;
         }
 
+
+        // Nice log file header :)
+        LogToFile("==== TTL LOG HEADER ====");
+        LogToFile($"Port: {portName}");
+        LogToFile($"Start Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
+        LogToFile($"Test Mode: {testMode}");
+        LogToFile("Columns: Timestamp | Status | Event | Byte Sent");
+        LogToFile("=========================");
+        
         serialPort = new SerialPort(portName, baudRate);
         try
         {
@@ -83,6 +99,10 @@ public class ArduinoTTLManager : MonoBehaviour
         {
             LogToBoth($"Failed to open serial port: {e}", isError: true);
         }
+        
+        
+
+
     }
 
     /// <summary>
@@ -96,23 +116,49 @@ public class ArduinoTTLManager : MonoBehaviour
             ? eventLabels[eventCode - 1]
             : $"Event{eventCode}";
 
-        string logMessage = $"[TTL_EVENT] {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | port={portName} | testMode={testMode} | event={label} | stateCode={eventCode} | byte={codeToSend}";
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-        if (testMode)
+        string status;
+
+        if (ttlEnabledEvents.Contains(label))
         {
-            LogToBoth("[TEST MODE] Would send " + logMessage);
-            return;
+
+            if (testMode)
+            {
+                status = "TEST_ONLY";
+            }
+
+            else if (serialPort != null && serialPort.IsOpen)
+            {
+                serialPort.Write(new byte[] { (byte)codeToSend }, 0, 1);
+                status = "SENT";
+            }
+
+            else
+            {
+                status = "FAILED";
+            }
+
         }
-        if (serialPort != null && serialPort.IsOpen)
+
+        else
         {
-            serialPort.Write(new byte[] { (byte)codeToSend }, 0, 1);
-            LogToBoth("SENT " + logMessage);
+            status = "LOG_ONLY";
+        }
+
+        string logLine;
+        if (status == "SENT")
+        {
+            logLine = $"{timestamp} | {status} | event={label} | byte={codeToSend}";
         }
         else
         {
-            LogToBoth("FAILED TO SEND " + logMessage + " (serial port not open)", isError: true);
+            logLine = $"{timestamp} | {status} | event={label} | No Byte Sent";
         }
+
+        LogToBoth(logLine, isError: status == "FAILED");
     }
+
 
     void OnApplicationQuit()
     {

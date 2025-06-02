@@ -44,10 +44,10 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
     private const byte TTL_DistractorOn = 4;
     private const byte TTL_DistractorOff = 5;
     private const byte TTL_TargetOn = 6;      
-    private const byte TTL_ChoiceOn = 7;
+    private const byte TTL_Choice = 7;
     private const byte TTL_BlockStartEnd = 8; // Session/Block start/end. End block used in WorkingMemory_TaskLevel.cs
-
-    private const byte SuccessFail = 9;
+    private const byte Correct = 9;
+    private const byte Incorrect = 10;
 
 
     private ArduinoTTLManager arduinoTTLManager;
@@ -261,13 +261,17 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         {
             arduinoTTLManager?.SendTTL(TTL_SampleOff); //samples will be off now
             if (postSampleDistractorStims.stimDefs.Count != 0)
+            {
                 StateAfterDelay = DisplayDistractors;
+                DelayDuration = CurrentTrialDef.PostSampleDelayDuration;
+            }
             else
             {
                 StateAfterDelay = SearchDisplay;
+                DelayDuration = CurrentTrialDef.PreTargetDelayDuration;
 
             }    
-            DelayDuration = CurrentTrialDef.PostSampleDelayDuration;
+            
         });
 
         // Show some distractors without the target/sample
@@ -275,7 +279,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         {
             StateAfterDelay = SearchDisplay;
             arduinoTTLManager?.SendTTL(TTL_DistractorOff); //distractors will be off now
-            DelayDuration = CurrentTrialDef.PostSampleDelayDuration;
+            DelayDuration = CurrentTrialDef.PreTargetDelayDuration;
         });
 
         // Show the target/sample with some other distractors
@@ -324,12 +328,12 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         {
             choiceMade = false;
             CorrectSelection = selectedSD.IsTarget;
-            arduinoTTLManager?.SendTTL(TTL_ChoiceOn); //Send TTL for selection made
+            arduinoTTLManager?.SendTTL(TTL_Choice); //Send TTL for selection made
 
             if (CorrectSelection)
             {
                 Debug.Log($"CorrectSelection = {CorrectSelection}, (trial: {TrialCount_InTask})"); // Debug only success/failure
-
+                arduinoTTLManager?.SendTTL(Correct); //Won't be sent as TTL, just logged
                 NumCorrect_InBlock++;
                 CurrentTaskLevel.NumCorrect_InTask++;
                 Session.EventCodeManager.SendCodeThisFrame("CorrectResponse");
@@ -337,6 +341,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
             else
             {
                 Debug.Log($"IncorrectSelection. Correct selection was = {CorrectSelection}, (trial: {TrialCount_InTask})"); //Debug only success/failure
+                arduinoTTLManager?.SendTTL(Incorrect); //Won't be sent as TTL, just logged
                 NumErrors_InBlock++;
                 CurrentTaskLevel.NumErrors_InTask++;
                 Session.EventCodeManager.SendCodeThisFrame("IncorrectResponse");
@@ -353,6 +358,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         });
         SearchDisplay.AddTimer(() => selectObjectDuration.value, ITI, () =>
         {
+            arduinoTTLManager?.SendTTL(Incorrect); //Won't be sent as TTL, just logged
             //means the player got timed out and didn't click on anything
             Debug.Log($"IncorrectSelection. (trial: {TrialCount_InTask})"); //Debug only success/failure
             Session.EventCodeManager.SendCodeThisFrame("NoChoice");

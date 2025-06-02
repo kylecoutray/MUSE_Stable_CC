@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311912, g: 0.3807395, b: 0.3587267, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -166,6 +166,7 @@ MonoBehaviour:
   TrialCount_InTask: 0
   TrialCount_InBlock: 0
   AbortCode: 0
+  StimulationPulsesGiven_Block: 0
   runningPerformance: 
   difficultyLevel: 0
   posStep: 0
@@ -176,6 +177,7 @@ MonoBehaviour:
   diffLevelJitter: 0
   NumReversalsUntilTerm: 0
   MinTrialsBeforeTermProcedure: 0
+  MaxTrialsInBlock: 0
   TerminationWindowSize: 0
   reversalsCount: 0
   DiffLevelsAtReversals: 
@@ -184,6 +186,7 @@ MonoBehaviour:
   calculatedThreshold_timing: 0
   blockAccuracy: 0
   ForceBlockEnd: 0
+  ReachedCriterion: 0
   TaskDataPath: 
   TrialSummaryString: 
   TaskLevel: {fileID: 0}
@@ -207,8 +210,11 @@ MonoBehaviour:
   HaloFBController: {fileID: 0}
   TokenFBController: {fileID: 0}
   SliderFBController: {fileID: 0}
+  MaskFBController: {fileID: 0}
+  DialogueController: {fileID: 0}
   PauseIconGO: {fileID: 0}
   TrialStimsLoaded: 0
+  PathReassignmentComplete: 0
   SkyboxMaterial: {fileID: 0}
   HeldTooLongTexture: {fileID: 0}
   HeldTooShortTexture: {fileID: 0}
@@ -216,8 +222,11 @@ MonoBehaviour:
   MovedTooFarSquareTexture: {fileID: 0}
   HeldTooShortSquareTexture: {fileID: 0}
   HeldTooLongSquareTexture: {fileID: 0}
+  NotSelectablePeriodTexture: {fileID: 0}
   TrialFilesLoaded: 0
   CurrentTrialDefIndex: 0
+  TrialStimulationCode: 0
+  blockStart: 1
   WM_CanvasGO: {fileID: 2045950497}
   runningAcc: 
   MinTrials: 0
@@ -291,8 +300,8 @@ MonoBehaviour:
     hidden: 0
     value: 0
     isRange: 0
-    max: 0
-    min: 0
+    max: 3
+    min: 3
     precision: 0
   playerViewTextList: []
   playerViewText: {fileID: 0}
@@ -326,9 +335,10 @@ MonoBehaviour:
   TaskProjectFolder: 
   BlockCount: 0
   NumAbortedTrials_InTask: 0
-  NumRewardPulses_InTask: 0
   NumAbortedTrials_InBlock: 0
   NumRewardPulses_InBlock: 0
+  NumRewardPulses_InTask: 0
+  StimulationPulsesGiven_Task: 0
   MinTrials_InBlock: 0
   MaxTrials_InBlock: 0
   ForceTaskEnd: 0
@@ -363,9 +373,10 @@ MonoBehaviour:
   TrialAndBlockDefsHandled: 0
   StimsHandled: 0
   BlockResults_AudioClip: {fileID: 0}
-  BlockResultsGO: {fileID: 0}
+  TaskResultsGO: {fileID: 0}
   importSettings_Level: {fileID: 0}
   verifyTask_Level: {fileID: 0}
+  BlockStimulationCode: 0
   NumCorrect_InTask: 0
   NumErrors_InTask: 0
   NumTokenBarFull_InTask: 0
