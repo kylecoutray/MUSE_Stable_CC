@@ -68,6 +68,14 @@ public class ArduinoTTLManager : MonoBehaviour
 
         // Create log file with timestamp
         logFilePath = Path.Combine(logsFolder, $"TTL_log_{DateTime.Now:yyyyMMdd_HHmmss}.txt");
+       
+        // Nice log file header :)
+        LogToFile("==== TTL LOG HEADER ====");
+        LogToFile($"Port: {portName}");
+        LogToFile($"Start Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
+        LogToFile($"Test Mode: {testMode}");
+        LogToFile("Columns: Timestamp | Status | Event | Byte Sent");
+        LogToFile("=========================");
 
         Debug.Log("[TTL] Target folder: " + logsFolder);
 
@@ -81,14 +89,8 @@ public class ArduinoTTLManager : MonoBehaviour
         }
 
 
-        // Nice log file header :)
-        LogToFile("==== TTL LOG HEADER ====");
-        LogToFile($"Port: {portName}");
-        LogToFile($"Start Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
-        LogToFile($"Test Mode: {testMode}");
-        LogToFile("Columns: Timestamp | Status | Event | Byte Sent");
-        LogToFile("=========================");
         
+
         serialPort = new SerialPort(portName, baudRate);
         try
         {
