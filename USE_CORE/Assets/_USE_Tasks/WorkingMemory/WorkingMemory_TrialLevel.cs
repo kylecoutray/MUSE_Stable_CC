@@ -233,7 +233,7 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
 */
         InitTrial.SpecifyTermination(
     () => !Session.SessionDef.IsHuman || !blockStart || ShotgunHandler.LastSuccessfulSelectionMatchesStartButton(),
-    DisplaySample,
+    Delay,
     () =>
     {
         if (blockStart && Session.SessionDef.IsHuman)
@@ -253,6 +253,10 @@ public class WorkingMemory_TrialLevel : ControlLevel_Trial_Template
         ShotgunHandler.HandlerActive = false;
         Session.EventCodeManager.SendCodeThisFrame("TokenBarVisible");
         arduinoTTLManager?.SendTTL(TTL_TrialOn); // TrialOn
+
+        //DELAY FIRST FOR 2.0
+        DelayDuration = 2.0f; // ← change 0.5f to whatever blank-screen time you want
+        StateAfterDelay = DisplaySample; 
     });
 
 
