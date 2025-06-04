@@ -31,6 +31,10 @@ using USE_Data;
 
 public class AudioFBController : MonoBehaviour
 {
+    private ArduinoTTLManager arduinoTTLManager;
+    private const byte AudioPlaying = 11;
+
+
     [Serializable]
     public struct AudioFB
     {
@@ -47,6 +51,8 @@ public class AudioFBController : MonoBehaviour
 
     public void Init(DataController frameData)
     {
+        arduinoTTLManager = GameObject.FindObjectOfType<ArduinoTTLManager>();
+
         frameData.AddDatum("PlayingAudioClipName", () => playingClipName);
 
         UpdateAudioSource();
@@ -84,6 +90,7 @@ public class AudioFBController : MonoBehaviour
 
     public void Play(string clipName)
     {
+        arduinoTTLManager?.SendTTL(AudioPlaying);
         playingClipName = clipName;
         if (clips.TryGetValue(clipName, out AudioClip clip))
         {

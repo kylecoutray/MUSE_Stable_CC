@@ -28,7 +28,8 @@ public class ArduinoTTLManager : MonoBehaviour
         "Choice",     // 7 TTL 
         "StartEndBlock", // 8 TTL
         "Success",    // 9 LOG ONLY. Will not work with Arduino script.
-        "Fail",         // 10 LOG ONLY. Will not work with Arduino script. 
+        "Fail",         // 10 LOG ONLY. Will not work with Arduino script.
+        "AudioPlaying", //11 LOG ONLY 
     };
 
     private static readonly HashSet<string> ttlEnabledEvents = new HashSet<string> //only the events that TTL will send for
